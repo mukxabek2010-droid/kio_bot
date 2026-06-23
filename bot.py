@@ -11,8 +11,8 @@ from telegram.ext import (
 # =============================================
 #   SOZLAMALAR — bularni o'zgartiring!
 # =============================================
-BOT_TOKEN = "8014335358:AAHGoMN6zU8fCJgGhU1Y625PU3KwyAY2cAI"       # @BotFather dan olingan token
-ADMIN_IDS = [8325726426]                  # Sizning Telegram ID (https://t.me/userinfobot)
+BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"       # @BotFather dan olingan token
+ADMIN_IDS = [123456789]                  # Sizning Telegram ID (https://t.me/userinfobot)
 DB_FILE = "movies.json"                  # Kinolar saqlanadigan fayl
 CHANNEL_ID = "@your_channel"             # Kino yuboradigan kanal (ixtiyoriy)
 # =============================================
@@ -626,7 +626,9 @@ async def handle_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
 #  BOTNI ISHGA TUSHIRISH
 # ─────────────────────────────────────────────
 
-def main():
+import asyncio
+
+async def main():
     print("🤖 CineBot ishga tushmoqda...")
     app = Application.builder().token(BOT_TOKEN).build()
 
@@ -651,7 +653,11 @@ def main():
     app.add_handler(CallbackQueryHandler(callback_handler))
 
     print("✅ Bot muvaffaqiyatli ishga tushdi!")
-    app.run_polling(allowed_updates=Update.ALL_TYPES)
+    async with app:
+        await app.start()
+        await app.updater.start_polling(allowed_updates=Update.ALL_TYPES)
+        print("🟢 Polling boshlandi. To'xtatish uchun Ctrl+C")
+        await asyncio.Event().wait()
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
